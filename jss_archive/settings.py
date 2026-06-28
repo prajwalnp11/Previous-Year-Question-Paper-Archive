@@ -85,17 +85,7 @@ except ImportError:
     except ImportError:
         pass
 
-if USE_SQLITE_ENV or 'test' in sys.argv or not has_mysql_driver:
-    if not has_mysql_driver and not (USE_SQLITE_ENV or 'test' in sys.argv):
-        print("\n" + "="*80)
-        print(" WARNING: MySQL driver ('mysqlclient' or 'pymysql') was not found.")
-        print(" Django is automatically falling back to SQLite for local development/review.")
-        print(" To connect to a MySQL server, please run:")
-        print("     pip install mysqlclient")
-        print("     OR")
-        print("     pip install pymysql")
-        print("="*80 + "\n")
-
+if USE_SQLITE_ENV or 'test' in sys.argv:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -103,20 +93,39 @@ if USE_SQLITE_ENV or 'test' in sys.argv or not has_mysql_driver:
         }
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'jss_archive',
-            'USER': 'root',
-            'PASSWORD': 'Prajju@5129',  # Replace with actual MySQL password
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'OPTIONS': {
+    DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.mysql')
+    DB_NAME = os.environ.get('DB_NAME', 'jss_archive')
+    DB_USER = os.environ.get('DB_USER', 'root')
+    DB_PASSWORD = os.environ.get('DB_PASSWORD', 'Prajju@5129')
+    DB_HOST = os.environ.get('DB_HOST', '127.0.0.1')
+    DB_PORT = os.environ.get('DB_PORT', '3306')
+
+    if not has_mysql_driver and DB_ENGINE == 'django.db.backends.mysql':
+        print("\n" + "="*80)
+        print(" WARNING: MySQL driver was not found. Falling back to SQLite.")
+        print("="*80 + "\n")
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': DB_ENGINE,
+                'NAME': DB_NAME,
+                'USER': DB_USER,
+                'PASSWORD': DB_PASSWORD,
+                'HOST': DB_HOST,
+                'PORT': DB_PORT,
+            }
+        }
+        if 'mysql' in DB_ENGINE:
+            DATABASES['default']['OPTIONS'] = {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',
             }
-        }
-    }
 
 
 # Password validation
