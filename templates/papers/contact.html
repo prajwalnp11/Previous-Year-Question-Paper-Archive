@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us | JSS Archive{% endblock %}
+
+{% block content %}
+<div class="upload-grid" id="contact-page-layout">
+    
+    <!-- Contact Form Card -->
+    <section class="card" id="contact-form-section">
+        <h1 class="page-title">Contact Us</h1>
+        <p class="page-subtitle">Send a message to our moderators for feedback, correction requests, or general inquiries.</p>
+        
+        <form method="POST" action="{% url 'contact_us' %}" id="contact-inquiry-form">
+            {% csrf_token %}
+            
+            <!-- Non-field error banners -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" id="contact-form-non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <!-- Form fields loop -->
+            {% for field in form %}
+                <div class="form-group" id="contact-form-group-{{ field.name }}">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    
+                    {% if field.help_text %}
+                        <small class="form-help" style="color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 0.25rem;">
+                            {{ field.help_text }}
+                        </small>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div class="alert alert-danger" style="margin-top: 0.5rem; padding: 0.5rem 1rem;" role="alert">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" id="contact-submit-btn">Send Message</button>
+            </div>
+        </form>
+    </section>
+    
+    <!-- Contact Options Sidebar -->
+    <aside class="card guidelines-box" id="contact-info-sidebar">
+        <h4>DMCA & Content Removal</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;">
+            We respect the intellectual property rights of authors and JSS Mahavidyapeetha. If you identify any study notes or exam papers that violate copyright rules, please send us a message immediately.
+        </p>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5;">
+            Include the details and link to the specific file. We review reports promptly and take down matching content within 24-48 hours.
+        </p>
+        
+        <h4 style="margin-top: 1rem;">Direct Support Email</h4>
+        <p style="font-size: 0.95rem; color: var(--primary); font-weight: 600;">
+            support@jssarchive.local
+        </p>
+    </aside>
+</div>
+{% endblock %}

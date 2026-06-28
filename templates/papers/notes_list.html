@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Subject Notes | JSS Archive{% endblock %}
+
+{% block content %}
+<!-- Search & Filter Controls -->
+<div class="card" id="notes-filters-card">
+    <h1 class="page-title">SEARCH SUBJECT NOTES</h1>
+    <p class="page-subtitle">Select filters below to locate study notes compiled by your peers.</p>
+    
+    <form method="GET" action="{% url 'notes_list' %}" class="filter-form" id="notes-filter-form">
+        <div class="filter-form-row">
+            
+            <!-- Text Query -->
+            <div class="form-group">
+                <label for="id_q" class="form-label">Search Keywords</label>
+                <input type="text" name="q" id="id_q" class="form-control" placeholder="Search title or subject..." value="{{ selected_q }}">
+            </div>
+            
+            <!-- Course Filter -->
+            <div class="form-group">
+                <label for="id_course" class="form-label">Degree/Course</label>
+                <select name="course" id="id_course" class="form-select">
+                    <option value="">All Courses</option>
+                    {% for key, val in courses %}
+                        <option value="{{ key }}" {% if selected_course == key %}selected{% endif %}>{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Subject Filter -->
+            <div class="form-group">
+                <label for="id_subject" class="form-label">Subject</label>
+                <select name="subject" id="id_subject" class="form-select">
+                    <option value="">All Subjects</option>
+                    {% for subj in subjects %}
+                        <option value="{{ subj.id }}" {% if selected_subject == subj.id %}selected{% endif %}>
+                            {{ subj.name }}{% if subj.code %} ({{ subj.code }}){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-search" id="notes-filter-submit-btn">Filter</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Upload Notes CTA Banner -->
+<div class="card" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; background: rgba(100, 50, 255, 0.04); margin-bottom: 2rem;" id="upload-notes-cta-banner">
+    <div>
+        <h3 style="margin-bottom: 0.25rem;">Have study notes to share?</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Contribute your handwritten or typed PDF notes to support your batchmates.</p>
+    </div>
+    <div style="max-width: 200px;">
+        <a href="{% url 'notes_upload' %}" class="btn btn-primary" id="notes-upload-link-btn">Upload Study Notes</a>
+    </div>
+</div>
+
+<!-- Notes Listing Results -->
+<div class="papers-grid" id="notes-results-grid">
+    {% for note in notes %}
+        <article class="paper-card" id="note-element-{{ note.id }}">
+            <div>
+                <header>
+                    <div class="paper-meta">{{ note.get_course_display }}</div>
+                    <h3 class="paper-subject">{{ note.title }}</h3>
+                </header>
+                <div class="paper-info-row" style="margin-top: 0.5rem;">
+                    <div class="paper-info-item">
+                        <span>📖</span> Subject: <strong>{{ note.subject.name }}</strong>
+                    </div>
+                    {% if note.subject.code %}
+                        <div class="paper-info-item">
+                            <span>🔑</span> Code: <strong>{{ note.subject.code }}</strong>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div style="margin-top: 1.25rem;">
+                <a href="{% url 'notes_detail' note.id %}" class="btn btn-outline" id="note-view-btn-{{ note.id }}">
+                    View &amp; Download Notes
+                </a>
+            </div>
+        </article>
+    {% empty %}
+        <div class="no-results" id="notes-empty-state" style="grid-column: span 3;">
+            <h3>No Subject Notes Found</h3>
+            <p>We couldn't find any study notes matching your search filters. Be the first to share notes for this subject!</p>
+            <div style="margin-top: 1.5rem; max-width: 250px; margin-left: auto; margin-right: auto;">
+                <a href="{% url 'notes_upload' %}" class="btn btn-primary">Contribute Notes</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

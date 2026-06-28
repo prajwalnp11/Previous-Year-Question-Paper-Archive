@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Previous Year Question Papers | JSS {% endblock %}
+
+{% block content %}
+<!-- Search & Filter Controls -->
+<div class="card" id="search-filters-card">
+    <h1 class="page-title">SEARCH QUESTION PAPER</h1>
+    <p class="page-subtitle">Select filters below to locate question papers from past semesters.</p>
+    
+    <form method="GET" action="{% url 'paper_list' %}" class="filter-form" id="search-filter-form">
+        <div class="filter-form-row">
+            
+            <!-- Text Query -->
+            <div class="form-group">
+                <label for="id_q" class="form-label">Subject Keywords</label>
+                <input type="text" name="q" id="id_q" class="form-control" placeholder="Search subject or code..." value="{{ selected_q }}">
+            </div>
+            
+            <!-- Course Filter -->
+            <div class="form-group">
+                <label for="id_course" class="form-label">Degree/Course</label>
+                <select name="course" id="id_course" class="form-select">
+                    <option value="">All Courses</option>
+                    {% for key, val in courses %}
+                        <option value="{{ key }}" {% if selected_course == key %}selected{% endif %}>{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Subject Filter -->
+            <div class="form-group">
+                <label for="id_subject" class="form-label">Subject</label>
+                <select name="subject" id="id_subject" class="form-select">
+                    <option value="">All Subjects</option>
+                    {% for subj in subjects %}
+                        <option value="{{ subj.id }}" {% if selected_subject == subj.id %}selected{% endif %}>
+                            {{ subj.name }}{% if subj.code %} ({{ subj.code }}){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Semester Filter -->
+            <div class="form-group">
+                <label for="id_semester" class="form-label">Semester</label>
+                <select name="semester" id="id_semester" class="form-select">
+                    <option value="">All Semesters</option>
+                    {% for key, val in semesters %}
+                        <option value="{{ key }}" {% if selected_semester == key %}selected{% endif %}>{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Year Filter -->
+            <div class="form-group">
+                <label for="id_year" class="form-label">Exam Year</label>
+                <select name="year" id="id_year" class="form-select">
+                    <option value="">All Years</option>
+                    {% for y in years %}
+                        <option value="{{ y }}" {% if selected_year == y %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-search" id="filter-submit-btn">Filter</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Papers Listing Results -->
+<div class="papers-grid" id="question-papers-results-grid">
+    {% for paper in papers %}
+        <article class="paper-card" id="paper-element-{{ paper.id }}">
+            <div>
+                <header>
+                    <div class="paper-meta">{{ paper.get_course_display }}</div>
+                    <h3 class="paper-subject">{{ paper.subject.name }}</h3>
+                </header>
+                <div class="paper-info-row">
+                    <div class="paper-info-item">
+                        <span>📅</span> Year: <strong>{{ paper.year }}</strong>
+                    </div>
+                    <div class="paper-info-item">
+                        <span>🎓</span> <strong>{{ paper.get_semester_display }}</strong>
+                    </div>
+                    {% if paper.subject.code %}
+                        <div class="paper-info-item">
+                            <span>🔑</span> Code: <strong>{{ paper.subject.code }}</strong>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <a href="{% url 'paper_detail' paper.id %}" class="btn btn-outline" id="paper-view-btn-{{ paper.id }}">
+                    View &amp; Download
+                </a>
+            </div>
+        </article>
+    {% empty %}
+        <div class="no-results" id="search-empty-state">
+            <h3>No Question Papers Found</h3>
+            <p>We couldn't find any papers matching your filter criteria. Be the first to upload this paper for other students!</p>
+            <div style="margin-top: 1.5rem; max-width: 250px; margin-left: auto; margin-right: auto;">
+                <a href="{% url 'paper_upload' %}" class="btn btn-primary">Contribute Paper</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

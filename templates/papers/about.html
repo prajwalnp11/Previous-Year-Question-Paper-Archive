@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us | JSS Archive{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="page-title">About Us</h1>
+    <p class="page-subtitle"> Centralized Academic Archive for JSS Students</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; color: var(--text-main); font-size: 1rem; line-height: 1.7;">
+        <section>
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.4rem;">Our Mission</h2>
+            <p>The **JSS Previous Year Question Paper Archive** was created to address a simple challenge: the fragmentation of past exam resources. Our mission is to provide students of <strong>JSS Arts, Commerce, and Science College (Ooty Road, Mysore)</strong> with a centralized, modern, and highly accessible database where they can find previous year question papers and quality subject notes to aid in exam preparation.</p>
+        </section>
+
+        <section>
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.4rem;">What We Offer</h2>
+            <ul style="padding-left: 1.5rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li><strong>Dynamic Search & Filters</strong>: Quickly locate exam question papers and subject study guides by filtering for Course (B.Sc, M.Sc), Subject, Exam Year, and Semester.</li>
+                <li><strong>Safe Uploads</strong>: Contributors can easily share PDF exam papers with the community. Every file is validated through security checks (magic numbers and UUID renaming) to keep the archive safe.</li>
+                <li><strong>Quality Moderation</strong>: Administrators review each upload in a queue to ensure only high-quality, relevant study materials become public.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.4rem;">Get Involved</h2>
+            <p>This archive thrives on peer-to-peer contributions. If you have exam papers from previous semesters or neat study notes, please upload them! Let's work together to help our college community achieve higher academic success.</p>
+        </section>
+    </div>
+</div>
+{% endblock %}

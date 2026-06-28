@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Download {{ note.title }} | JSS Archive{% endblock %}
+
+{% block extra_head %}
+<!-- 
+  GOOGLE ADSENSE GLOBAL TAG
+  Place this async script tag inside the <head> block once.
+  Replace ca-pub-XXXXXXXXXXXXXXXX with your actual Google AdSense Publisher Account ID.
+-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+<!-- 
+  MONETIZATION ZONE 1: TOP LEADERBOARD BANNER (728x90)
+  Placed at the top of the main container for high viewability on page load.
+-->
+<div class="adsense-container ad-top-leaderboard" id="note-ad-slot-leaderboard" role="complementary" aria-label="Top Leaderboard Advertisement">
+    <!-- AdSense Ad Code -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="9876543210"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<div class="download-layout" id="notes-download-layout">
+    
+    <!-- Left Column: Details & Download Button -->
+    <section class="card" id="notes-details-section">
+        <h1 class="page-title">{{ note.title }}</h1>
+        <p class="page-subtitle">Verify details and download the student study resource.</p>
+        
+        <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                <thead>
+                    <tr style="display: none;">
+                        <th scope="col">Detail Name</th>
+                        <th scope="col">Detail Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" style="padding: 0.75rem 0; color: var(--text-muted); font-weight: 500;">Title:</th>
+                        <td style="padding: 0.75rem 0; font-weight: 600;">{{ note.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding: 0.75rem 0; color: var(--text-muted); font-weight: 500;">Subject Name:</th>
+                        <td style="padding: 0.75rem 0; font-weight: 600;">{{ note.subject.name }}</td>
+                    </tr>
+                    {% if note.subject.code %}
+                    <tr>
+                        <th scope="row" style="padding: 0.75rem 0; color: var(--text-muted); font-weight: 500;">Subject Code:</th>
+                        <td style="padding: 0.75rem 0; font-weight: 600;">{{ note.subject.code }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row" style="padding: 0.75rem 0; color: var(--text-muted); font-weight: 500;">Degree/Course:</th>
+                        <td style="padding: 0.75rem 0; font-weight: 600;">{{ note.get_course_display }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding: 0.75rem 0; color: var(--text-muted); font-weight: 500;">Format:</th>
+                        <td style="padding: 0.75rem 0; font-weight: 600; color: var(--accent);">PDF Document</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 
+          MONETIZATION ZONE 2: INLINE RECTANGLE (336x280)
+          Placed directly above the download trigger box. This yields high engagement rates 
+          as users scan down to find the download button.
+        -->
+        <div class="adsense-container ad-inline-rectangle" id="note-ad-slot-inline" role="complementary" aria-label="Inline Advertisement">
+            <!-- AdSense Ad Code -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:336px;height:280px"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="1122334455"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Timer Lock & Download CTA -->
+        <div class="countdown-box" id="notes-download-timer-panel">
+            <p id="note-countdown-status-text">Verifying document integrity. Securing link in...</p>
+            <div class="timer-number" id="note-countdown-timer-value">5</div>
+            
+            <!-- Direct File Download Link (Dynamically unlocked via script) -->
+            <a href="{{ note.file.url }}" class="btn btn-download-action" id="note-file-download-action-btn" download>
+                Preparing Download Link...
+            </a>
+        </div>
+    </section>
+    
+    <!-- Right Column: Sidebar Ad & Security Checklist -->
+    <aside style="display: flex; flex-direction: column; gap: 1.5rem;" id="notes-download-sidebar">
+        
+        <!-- Info Card -->
+        <div class="card" style="padding: 1.5rem;">
+            <h4 style="margin-bottom: 0.75rem; color: var(--text-main);">Study Notes Security</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--success);">✓</span> Scanned and verified safe
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--success);">✓</span> Official curriculum alignment
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--success);">✓</span> PDF format readable on all devices
+            </p>
+        </div>
+        
+        <!-- 
+          MONETIZATION ZONE 3: SIDEBAR DISPLAY AD (300x250)
+          Vertical banner placement located in the sidebar column.
+        -->
+        <div class="adsense-container ad-sidebar-banner" id="note-ad-slot-sidebar" role="complementary" aria-label="Sidebar Advertisement">
+            <!-- AdSense Ad Code -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="6677889900"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            var secondsLeft = 5; // Configurable wait time in seconds
+            var timerText = document.getElementById("note-countdown-timer-value");
+            var statusText = document.getElementById("note-countdown-status-text");
+            var actionBtn = document.getElementById("note-file-download-action-btn");
+
+            var downloadCountdown = setInterval(function() {
+                secondsLeft--;
+                timerText.textContent = secondsLeft;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(downloadCountdown);
+                    timerText.style.display = "none";
+                    statusText.textContent = "Your download is ready. Click the button below.";
+                    
+                    // Enable and activate download button
+                    actionBtn.classList.add("active");
+                    actionBtn.textContent = "Download Study Notes";
+                }
+            }, 1000);
+        });
+    })();
+</script>
+{% endblock %}

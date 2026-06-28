@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Contribute Question Paper | JSS Archive{% endblock %}
+
+{% block content %}
+<div class="upload-grid" id="upload-page-layout">
+    
+    <!-- Upload Form Card -->
+    <section class="card" id="upload-form-section">
+        <h1 class="page-title">Contribute Paper</h1>
+        <p class="page-subtitle">Support your peers by sharing previous year question papers. All submissions are moderated.</p>
+        
+        <form method="POST" enctype="multipart/form-data" action="{% url 'paper_upload' %}" id="question-paper-upload-form">
+            {% csrf_token %}
+            
+            <!-- Non-field error banners -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" id="form-non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <!-- Form fields loop -->
+            {% for field in form %}
+                <div class="form-group" id="form-group-{{ field.name }}">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    
+                    {% if field.help_text %}
+                        <small class="form-help" style="color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 0.25rem;">
+                            {{ field.help_text }}
+                        </small>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div class="alert alert-danger" style="margin-top: 0.5rem; padding: 0.5rem 1rem;" role="alert">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" id="upload-submit-btn">Submit Paper</button>
+            </div>
+        </form>
+    </section>
+    
+    <!-- Submission Guidelines Sidebar -->
+    <aside class="card guidelines-box" id="upload-guidelines-sidebar">
+        <h4>Submission Policies</h4>
+        <ul class="guidelines-list">
+            <li><strong>PDF Documents Only</strong>: All papers must be compiled and saved as standard PDF files. Image files are rejected.</li>
+            <li><strong>10MB Size Limit</strong>: Uploads must not exceed 10MB. Ensure pages are compressed and scanned clearly.</li>
+            <li><strong>Accurate Categorization</strong>: Make sure you select the correct subject, academic year, and semester so students can locate it.</li>
+            <li><strong>Moderation Protocol</strong>: Submissions are queued and checked for spam or malicious scripts. Once approved, the document goes live.</li>
+            <li><strong>Legitimacy</strong>: Only submit past semester papers. Submission of leak sheets or ongoing exam papers is strictly prohibited.</li>
+        </ul>
+    </aside>
+</div>
+{% endblock %}

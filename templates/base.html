@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JSS Archive | Previous Year Question Papers{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Access and download previous year question papers for JSS Arts, Commerce, and Science College. Explore archives filtered by subject, semester, and year.{% endblock %}">
+    
+    <!-- Link to premium styling -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1.0.3">
+    
+    <!-- Block for page-specific styles or script links -->
+    {% block extra_head %}{% endblock %}
+    
+    <!-- Google AdSense Verification Code Block -->
+    {% block adsense_verification %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar" role="banner">
+        <div class="navbar-container">
+            <a href="{% url 'paper_list' %}" class="brand" id="nav-logo-link" aria-label="JSS College Archive Home">
+                <img src="{% static 'images/jss_logo.jpg' %}" alt="JSS College Emblem" class="brand-logo">
+                <div class="brand-text">
+                    <span class="brand-main">JSS COLLEGE OF ARTS COMMERCE AND SCIENCE</span>
+                    <span class="brand-sub">OOTY ROAD MYSORE-570025</span>
+                </div>
+            </a>
+            <nav class="nav-links" role="navigation" aria-label="Main Navigation">
+                <a href="{% url 'notes_list' %}" class="nav-link {% if request.resolver_match.url_name == 'notes_list' %}active{% endif %}" id="nav-notes-btn">Subject Notes</a>
+                <a href="{% url 'paper_list' %}" class="nav-link {% if request.resolver_match.url_name == 'paper_list' %}active{% endif %}" id="nav-search-btn">Search Papers</a>
+                <a href="{% url 'paper_upload' %}" class="nav-link btn-upload-nav {% if request.resolver_match.url_name == 'paper_upload' %}active{% endif %}" id="nav-upload-btn">Upload Paper</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content" id="main-content-area" role="main">
+        <!-- System Alert Messages -->
+        {% if messages %}
+            <div class="messages-container" id="django-messages-banner">
+                {% for message in messages %}
+                
+                    <div class="alert alert-{{ message.tags }}" id="alert-msg-{{ forloop.counter }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-links" style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+                <a href="{% url 'about' %}" class="footer-link">About Us</a>
+                <a href="{% url 'contact_us' %}" class="footer-link">Contact Us</a>
+                <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+                <a href="{% url 'terms_conditions' %}" class="footer-link">Terms & Conditions</a>
+                <a href="{% url 'disclaimer' %}" class="footer-link">Disclaimer</a>
+            </div>
+            <p>&copy; {% now "Y" %} JSS Arts, Commerce, and Science College. All rights reserved.</p>
+            <p style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.5rem;">This is a student-driven archive. Ensure you only upload official, old question papers in PDF format.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

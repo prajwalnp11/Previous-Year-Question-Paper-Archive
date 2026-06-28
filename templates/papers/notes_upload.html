@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Study Notes | JSS Archive{% endblock %}
+
+{% block content %}
+<div class="upload-grid" id="notes-upload-page-layout">
+    
+    <!-- Upload Form Card -->
+    <section class="card" id="notes-upload-form-section">
+        <h1 class="page-title">Upload Study Notes</h1>
+        <p class="page-subtitle">Share your study summaries, unit notes, or reference docs. All submissions are reviewed.</p>
+        
+        <form method="POST" enctype="multipart/form-data" action="{% url 'notes_upload' %}" id="subject-notes-upload-form">
+            {% csrf_token %}
+            
+            <!-- Non-field error banners -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" id="notes-form-non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <!-- Form fields loop -->
+            {% for field in form %}
+                <div class="form-group" id="notes-form-group-{{ field.name }}">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    
+                    {% if field.help_text %}
+                        <small class="form-help" style="color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 0.25rem;">
+                            {{ field.help_text }}
+                        </small>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div class="alert alert-danger" style="margin-top: 0.5rem; padding: 0.5rem 1rem;" role="alert">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" id="notes-upload-submit-btn">Submit Notes</button>
+            </div>
+        </form>
+    </section>
+    
+    <!-- Submission Guidelines Sidebar -->
+    <aside class="card guidelines-box" id="notes-upload-guidelines-sidebar">
+        <h4>Submission Policies</h4>
+        <ul class="guidelines-list">
+            <li><strong>PDF Documents Only</strong>: All notes files must be compiled and saved as standard PDF documents.</li>
+            <li><strong>10MB Size Limit</strong>: Uploaded files must not exceed 10MB. Compress scans if necessary.</li>
+            <li><strong>Descriptive Title</strong>: Enter a clear title specifying what the notes cover (e.g., "Thermodynamics Unit 2 notes").</li>
+            <li><strong>Moderation Protocol</strong>: Submissions are verified for legibility and safety. Approved notes will instantly show in search listings.</li>
+            <li><strong>Respect Copyrights</strong>: Only submit notes that you or your peers have compiled. Do not upload copyrighted textbooks or commercial materials.</li>
+        </ul>
+    </aside>
+</div>
+{% endblock %}
