@@ -102,3 +102,13 @@ class Command(BaseCommand):
                     notes_count += 1
                     
         self.stdout.write(self.style.SUCCESS(f'Successfully seeded database with {notes_count} subject notes!'))
+
+        # Seed superusers if they do not exist
+        self.stdout.write('Checking and seeding admin accounts...')
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        for username, email in [('admin', 'admin@jss.edu'), ('prajwal', 'prajwal@jss.edu')]:
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_superuser(username, email, 'Prajju@5129')
+                self.stdout.write(self.style.SUCCESS(f'Successfully created superuser: {username}'))
+
