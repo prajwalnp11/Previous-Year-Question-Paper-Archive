@@ -10,7 +10,7 @@ import sys
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jss-arts-commerce-science-archive-key'
+SECRET_KEY = 'nxdcce1q(5r1ud1#tpyks6j1hvhq_a3qmc3&p$$!6w%(t!x7*8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
