@@ -93,12 +93,39 @@ if USE_SQLITE_ENV or 'test' in sys.argv:
         }
     }
 else:
-    DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.mysql')
-    DB_NAME = os.environ.get('DB_NAME', 'jss_archive')
-    DB_USER = os.environ.get('DB_USER', 'root')
-    DB_PASSWORD = os.environ.get('DB_PASSWORD', 'Prajju@5129')
-    DB_HOST = os.environ.get('DB_HOST', '127.0.0.1')
-    DB_PORT = os.environ.get('DB_PORT', '3306')
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        from urllib.parse import urlparse, parse_qs
+        parsed = urlparse(DATABASE_URL)
+        
+        scheme = parsed.scheme
+        if scheme == 'mysql':
+            DB_ENGINE = 'django.db.backends.mysql'
+        elif scheme in ('postgresql', 'postgres'):
+            DB_ENGINE = 'django.db.backends.postgresql'
+        elif scheme == 'sqlite':
+            DB_ENGINE = 'django.db.backends.sqlite3'
+        else:
+            DB_ENGINE = scheme
+
+        DB_NAME = parsed.path[1:] if parsed.path else ''
+        if '?' in DB_NAME:
+            DB_NAME = DB_NAME.split('?')[0]
+        DB_USER = parsed.username or ''
+        DB_PASSWORD = parsed.password or ''
+        DB_HOST = parsed.hostname or ''
+        DB_PORT = str(parsed.port) if parsed.port else ''
+        
+        query_params = parse_qs(parsed.query)
+        ssl_mode = query_params.get('ssl-mode') or query_params.get('ssl_mode')
+    else:
+        DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.mysql')
+        DB_NAME = os.environ.get('DB_NAME', 'jss_archive')
+        DB_USER = os.environ.get('DB_USER', 'root')
+        DB_PASSWORD = os.environ.get('DB_PASSWORD', 'Prajju@5129')
+        DB_HOST = os.environ.get('DB_HOST', '127.0.0.1')
+        DB_PORT = os.environ.get('DB_PORT', '3306')
+        ssl_mode = None
 
     if not has_mysql_driver and DB_ENGINE == 'django.db.backends.mysql':
         print("\n" + "="*80)
@@ -126,6 +153,8 @@ else:
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',
             }
+            if ssl_mode:
+                DATABASES['default']['OPTIONS']['ssl'] = {}
 
 
 # Password validation
