@@ -225,4 +225,14 @@ class JSSArchiveTests(TestCase):
         choices = [choice[0] for choice in QuestionPaper.COURSE_CHOICES]
         self.assertIn('MCA', choices)
 
+    def test_ads_txt_endpoint(self):
+        """
+        Verify that /ads.txt serves the correct digital seller records.
+        """
+        response = self.client.get('/ads.txt')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'text/plain')
+        self.assertIn('google.com, pub-8995537400969198, DIRECT, f08c47fec0942fa0', response.content.decode())
+
+
 
