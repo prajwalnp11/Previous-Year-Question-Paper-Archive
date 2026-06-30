@@ -38,6 +38,7 @@ class QuestionPaper(models.Model):
     COURSE_CHOICES = [
         ('BSC', 'Bachelor of Science (B.Sc)'),
         ('MSC', 'Master of Science (M.Sc)'),
+        ('MCA', 'Master of Computer Applications (M.C.A)'),
     ]
 
     SEMESTER_CHOICES = [

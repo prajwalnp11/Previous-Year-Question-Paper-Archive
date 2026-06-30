@@ -218,3 +218,11 @@ class JSSArchiveTests(TestCase):
         from .models import ContactMessage
         self.assertFalse(ContactMessage.objects.filter(email='invalid-email').exists())
 
+    def test_mca_course_option_exists(self):
+        """
+        Verify that MCA exists as a valid course choice.
+        """
+        choices = [choice[0] for choice in QuestionPaper.COURSE_CHOICES]
+        self.assertIn('MCA', choices)
+
+

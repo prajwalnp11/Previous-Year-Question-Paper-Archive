@@ -49,6 +49,9 @@ class Command(BaseCommand):
                 "Mathematics", "Physics", "Chemistry", "Biochemistry", 
                 "Bio-Technology", "Microbiology"
             ]),
+            ('MCA', [
+                "Computer Science", "Technology", "Mathematics"
+            ]),
         ]
 
         semesters = ['SEM1', 'SEM2', 'SEM3', 'SEM4', 'SEM5', 'SEM6']
