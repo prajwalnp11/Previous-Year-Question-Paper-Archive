@@ -224,7 +224,7 @@ AWS_QUERYSTRING_AUTH = False  # Generate clean, non-expiring public URLs
 # Configure custom domain for Supabase public URLs
 if AWS_S3_ENDPOINT_URL and 'supabase.co' in AWS_S3_ENDPOINT_URL:
     import re
-    match = re.search(r'https://([^.]+)\.supabase\.co', AWS_S3_ENDPOINT_URL)
+    match = re.search(r'https://([^.]+)(?:\.storage)?\.supabase\.co', AWS_S3_ENDPOINT_URL)
     if match:
         project_ref = match.group(1)
         AWS_S3_CUSTOM_DOMAIN = f"{project_ref}.supabase.co/storage/v1/object/public/{AWS_STORAGE_BUCKET_NAME}"
