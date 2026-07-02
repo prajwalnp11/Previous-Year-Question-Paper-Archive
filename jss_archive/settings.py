@@ -218,8 +218,16 @@ AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')
 # Optional settings for S3 Boto3 storage
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = 'public-read'  # Ensure uploaded PDFs are publicly accessible
+AWS_DEFAULT_ACL = None  # Supabase S3 API handles permissions at bucket level
 AWS_QUERYSTRING_AUTH = False  # Generate clean, non-expiring public URLs
+
+# Configure custom domain for Supabase public URLs
+if AWS_S3_ENDPOINT_URL and 'supabase.co' in AWS_S3_ENDPOINT_URL:
+    import re
+    match = re.search(r'https://([^.]+)\.supabase\.co', AWS_S3_ENDPOINT_URL)
+    if match:
+        project_ref = match.group(1)
+        AWS_S3_CUSTOM_DOMAIN = f"{project_ref}.supabase.co/storage/v1/object/public/{AWS_STORAGE_BUCKET_NAME}"
 
 if AWS_STORAGE_BUCKET_NAME:
     STORAGES = {
