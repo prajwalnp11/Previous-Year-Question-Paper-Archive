@@ -4,9 +4,20 @@ from papers.models import Subject, QuestionPaper, SubjectNote
 import random
 
 class Command(BaseCommand):
-    help = 'Seeds JSS Archive database with subjects and mock question papers for all courses.'
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--clear',
+            action='store_true',
+            help='Clear existing question papers and notes before seeding',
+        )
 
     def handle(self, *args, **options):
+        if options.get('clear'):
+            self.stdout.write('Clearing existing papers and notes...')
+            QuestionPaper.objects.all().delete()
+            SubjectNote.objects.all().delete()
+            self.stdout.write(self.style.SUCCESS('Cleared existing database records.'))
+
         self.stdout.write('Seeding academic subjects...')
         
         # Subject definitions mapped to courses
